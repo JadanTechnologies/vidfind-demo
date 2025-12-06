@@ -1,4 +1,5 @@
 
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { MovieResult, MusicResult } from '../types';
 
@@ -16,6 +17,8 @@ export const identifyMedia = async (base64Data: string, mimeType: string = "imag
       title: "Inception",
       year: "2010",
       productionCompany: "Warner Bros. Pictures",
+      copyrightHolder: "Warner Bros. Entertainment Inc.",
+      isCopyrighted: true,
       director: "Christopher Nolan",
       timestamp: "01:24:15",
       trailerUrl: "https://www.youtube.com/results?search_query=inception+trailer",
@@ -42,6 +45,8 @@ export const identifyMedia = async (base64Data: string, mimeType: string = "imag
       - Official Title
       - Release Year
       - Production Company (Studio)
+      - Copyright Holder (Who owns the rights?)
+      - Is Copyrighted? (Boolean, likely true for commercial movies)
       - Director
       - Approximate Timestamp of this scene (Estimate based on visual context, e.g., "00:45:10"). If unsure, estimate.
       - Cast (Main actors visible or known for this scene)
@@ -70,6 +75,8 @@ export const identifyMedia = async (base64Data: string, mimeType: string = "imag
             title: { type: Type.STRING },
             year: { type: Type.STRING },
             productionCompany: { type: Type.STRING },
+            copyrightHolder: { type: Type.STRING },
+            isCopyrighted: { type: Type.BOOLEAN },
             director: { type: Type.STRING },
             timestamp: { type: Type.STRING },
             cast: { type: Type.ARRAY, items: { type: Type.STRING } },

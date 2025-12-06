@@ -1,4 +1,5 @@
 
+
 export enum UserRole {
   GUEST = 'GUEST',
   USER = 'USER',
@@ -50,9 +51,9 @@ export interface MovieResult {
   title: string;
   year: string;
   director: string;
-  productionCompany?: string; // New
-  timestamp?: string; // New: Scene timestamp e.g. "01:14:20"
-  trailerUrl?: string; // New
+  productionCompany?: string; 
+  timestamp?: string; // Scene timestamp e.g. "01:14:20"
+  trailerUrl?: string; 
   cast: string[];
   genre: string[];
   plot: string;
@@ -60,6 +61,9 @@ export interface MovieResult {
   streaming: string[];
   imageUrl?: string;
   actors?: Actor[];
+  // Copyright Checker
+  copyrightHolder?: string;
+  isCopyrighted?: boolean;
 }
 
 export interface MusicResult {

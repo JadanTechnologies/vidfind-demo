@@ -1,6 +1,7 @@
 
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, X, Loader2, PlayCircle, Film, Share2, User, Star, Bookmark, Check, History, Clock, Trash2, ChevronRight, AlertCircle, RefreshCw, Clapperboard, Video } from 'lucide-react';
+import { Upload, X, Loader2, PlayCircle, Film, Share2, User, Star, Bookmark, Check, History, Clock, Trash2, ChevronRight, AlertCircle, RefreshCw, Clapperboard, Video, ShieldAlert } from 'lucide-react';
 import { identifyMedia } from '../services/gemini';
 import { MovieResult } from '../types';
 
@@ -121,6 +122,12 @@ const Identify: React.FC = () => {
         if (data) {
             setResult(data);
             addToHistory(data, preview);
+            
+            // Check for copyright and simulate admin notification
+            if (data.isCopyrighted || data.copyrightHolder) {
+                console.warn(`[COPYRIGHT ALERT] Content detected: ${data.title} by ${data.copyrightHolder}. Notifying Admin...`);
+                // In a real app, this would send a POST request to the admin backend
+            }
         } else {
             setError("Could not identify the video content. Please try a different frame.");
         }
@@ -284,6 +291,20 @@ const Identify: React.FC = () => {
                    </div>
                  ) : (
                    <div className="space-y-6 animate-fade-in">
+                      {/* Copyright Warning */}
+                      {(result.isCopyrighted || result.copyrightHolder) && (
+                          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3 animate-pulse-slow">
+                              <ShieldAlert className="text-red-500 flex-shrink-0" size={20} />
+                              <div className="text-xs">
+                                  <p className="font-bold text-red-500 uppercase">Copyright Detected</p>
+                                  <p className="text-red-400">Rights owned by: <span className="font-bold">{result.copyrightHolder || result.productionCompany}</span></p>
+                              </div>
+                              <div className="ml-auto px-2 py-0.5 bg-red-500/20 text-red-400 text-[10px] font-bold rounded border border-red-500/30 uppercase">
+                                  Admin Notified
+                              </div>
+                          </div>
+                      )}
+
                       <div className="flex items-start justify-between">
                          <div>
                             <div className="flex items-center gap-2 mb-1">
