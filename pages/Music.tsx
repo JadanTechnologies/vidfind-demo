@@ -6,6 +6,7 @@ import { MusicResult } from '../types';
 const Music: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  const [mimeType, setMimeType] = useState<string>('image/jpeg');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<MusicResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -37,6 +38,8 @@ const Music: React.FC = () => {
         return;
     }
 
+    setMimeType(file.type);
+
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreview(reader.result as string);
@@ -48,8 +51,11 @@ const Music: React.FC = () => {
   const handleIdentify = async () => {
     if (!preview) return;
     setLoading(true);
+    
+    // Extract base64 (remove data:image/xyz;base64, prefix)
     const base64 = preview.split(',')[1];
-    const data = await identifyMusic(base64);
+    
+    const data = await identifyMusic(base64, mimeType);
     setResult(data);
     setLoading(false);
   };
@@ -59,6 +65,8 @@ const Music: React.FC = () => {
     setResult(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
+
+  const isVideoFile = mimeType.startsWith('video/');
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-12">
@@ -104,10 +112,14 @@ const Music: React.FC = () => {
            <div className="grid md:grid-cols-2 gap-0">
               {/* Preview Side */}
               <div className="relative h-80 md:h-auto bg-black flex items-center justify-center p-4">
-                 <img src={preview} alt="Upload preview" className="max-h-full max-w-full object-contain rounded-lg shadow-lg" />
+                 {isVideoFile ? (
+                     <video src={preview} controls className="max-h-full max-w-full rounded-lg shadow-lg" />
+                 ) : (
+                     <img src={preview} alt="Upload preview" className="max-h-full max-w-full object-contain rounded-lg shadow-lg" />
+                 )}
                  <button 
                   onClick={clear}
-                  className="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full hover:bg-red-500/80 transition-colors backdrop-blur-sm"
+                  className="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full hover:bg-red-500/80 transition-colors backdrop-blur-sm z-10"
                  >
                    <X size={20} />
                  </button>

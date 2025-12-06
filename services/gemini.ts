@@ -1,5 +1,3 @@
-
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { MovieResult, MusicResult } from '../types';
 
@@ -124,7 +122,7 @@ export const identifyMedia = async (base64Data: string, mimeType: string = "imag
   }
 };
 
-export const identifyMusic = async (base64Image: string): Promise<MusicResult | null> => {
+export const identifyMusic = async (base64Data: string, mimeType: string = "image/jpeg"): Promise<MusicResult | null> => {
     if (!apiKey) {
       return new Promise(resolve => setTimeout(() => resolve({
         title: "Essence",
@@ -157,7 +155,7 @@ export const identifyMusic = async (base64Image: string): Promise<MusicResult | 
         model,
         contents: {
           parts: [
-            { inlineData: { mimeType: "image/jpeg", data: base64Image } },
+            { inlineData: { mimeType: mimeType, data: base64Data } },
             { text: prompt }
           ]
         },
