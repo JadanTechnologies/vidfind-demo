@@ -1,0 +1,8 @@
+{
+  "name": "VidFind+",
+  "description": "The Shazam for Video. Identify movies, series, and music videos from short clips using AI. Features reels, social discovery, and comprehensive admin tools.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
