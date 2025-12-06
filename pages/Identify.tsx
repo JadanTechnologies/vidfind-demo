@@ -192,7 +192,7 @@ const Identify: React.FC = () => {
         {/* History Button */}
         <button 
             onClick={() => setShowHistory(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-full hover:bg-slate-50 dark:hover:bg-white/10 transition-colors text-slate-700 dark:text-gray-300"
+            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-full hover:bg-slate-50 dark:hover:bg-white/10 transition-colors text-slate-700 dark:text-gray-300 shadow-sm"
         >
             <History size={18} />
             <span className="font-medium hidden sm:inline">History</span>
@@ -415,7 +415,7 @@ const Identify: React.FC = () => {
       {showHistory && (
         <div className="fixed inset-0 z-50 flex justify-end">
             <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowHistory(false)}></div>
-            <div className="relative w-full max-w-md bg-white dark:bg-[#1e293b] h-full shadow-2xl p-6 overflow-y-auto animate-fade-in-up md:animate-slide-left">
+            <div className="relative w-full max-w-md bg-white dark:bg-[#1e293b] h-full shadow-2xl p-6 overflow-y-auto animate-fade-in-up md:animate-slide-left border-l border-white/5">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <History size={24} /> Recent Scans
@@ -433,7 +433,7 @@ const Identify: React.FC = () => {
                                 onClick={() => loadFromHistory(item)}
                                 className="group flex items-start gap-4 p-3 rounded-xl bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 cursor-pointer border border-transparent hover:border-brand-500 transition-all"
                             >
-                                <div className="w-20 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-black">
+                                <div className="w-20 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-black border border-white/5">
                                     <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex-1 min-w-0">
