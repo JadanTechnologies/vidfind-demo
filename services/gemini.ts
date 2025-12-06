@@ -2,9 +2,8 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { MovieResult, MusicResult } from '../types';
 
 // Initialize Gemini
-// Note: In a real production app, never expose API keys on the client.
-// This is for demonstration purposes within the constraints.
-const apiKey = process.env.API_KEY || ''; 
+// Robust check for process.env to prevent browser crash if not polyfilled during build/runtime
+const apiKey = (typeof process !== 'undefined' && process.env && process.env.API_KEY) ? process.env.API_KEY : ''; 
 const ai = new GoogleGenAI({ apiKey });
 
 export const identifyMedia = async (base64Data: string, mimeType: string = "image/jpeg"): Promise<MovieResult> => {
@@ -93,6 +92,7 @@ export const identifyMedia = async (base64Data: string, mimeType: string = "imag
             plot: { type: Type.STRING },
             confidence: { type: Type.NUMBER },
             streaming: { type: Type.ARRAY, items: { type: Type.STRING } },
+            imageUrl: { type: Type.STRING },
           },
         }
       }
@@ -139,16 +139,19 @@ export const identifyMusic = async (base64Data: string, mimeType: string = "imag
     try {
       const model = "gemini-2.5-flash";
       const prompt = `
-        Analyze this image/video frame. It is likely from a music video.
-        Identify the song, artist, and details.
-        Return JSON:
+        Analyze this input (image or video snippet). 
+        If it's a video, analyze the audio and visual context.
+        Identify the song, artist, and album details.
+        
+        Return JSON with these exact fields:
         - title: Song title
         - artist: Artist name(s)
         - album: Album name
         - genre: Music genre
         - year: Release year
-        - lyricsSnippet: A famous line from the song
+        - lyricsSnippet: A famous line from the song (or heard in the clip)
         - streaming: Platforms available
+        - coverUrl: A generated description or placeholder for the cover art
       `;
   
       const response = await ai.models.generateContent({
@@ -171,6 +174,7 @@ export const identifyMusic = async (base64Data: string, mimeType: string = "imag
               year: { type: Type.STRING },
               lyricsSnippet: { type: Type.STRING },
               streaming: { type: Type.ARRAY, items: { type: Type.STRING } },
+              coverUrl: { type: Type.STRING },
             },
           }
         }
